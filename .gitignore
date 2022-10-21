@@ -1,0 +1,8 @@
+**/*.docx
+**/*.pdf
+HW.aux
+HW.log
+HW.out
+HW.toc
+build
+HW.synctex.gz
