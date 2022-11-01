@@ -22,12 +22,17 @@ void print_message(const char *msg) {
 }
 
 int main() {
-    int is_child = fork() == 0;
+    int fork_result = fork();
+    if (fork_result < 0) {
+        print_message("Cannot fork");
+        _exit(1); // https://man7.org/linux/man-pages/man2/exit.2.html
+    }
+    int is_child = fork_result == 0;
     // Open for read
     int source_file_fd = open(source_file_name, O_RDONLY); // https://man7.org/linux/man-pages/man2/open.2.html
     if (source_file_fd == -1) {
         print_message("Cannot open source file");
-        _exit(1); // https://man7.org/linux/man-pages/man2/exit.2.html
+        _exit(1);
     }
     // Open output file
     struct stat st;
