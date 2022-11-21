@@ -7,7 +7,14 @@
 #include "external.h"
 #include "file_util.h"
 
+/**
+ * Number of child processes to spawn
+ */
 #define WORKER_COUNT 8
+/**
+ * How frequently we should empty the read buffer of slaves?
+ */
+#define BUFFER_EMPTY_INTERVAL 1000
 
 /**
  * Defines a job to be send to a slave
@@ -75,7 +82,11 @@ int main() {
             numbers_size = numbers_size / 2 + (numbers_size % 2);
         }
         close(master_to_slave_pipe[1]); // close for childs
+        close(slave_to_master_pipe[0]);
         printf("Result is %ld\n", numbers[0]);
+        free(numbers);
+        // Wait for children
+        wait_for_all_children();
     } else { // On slaves wait for work
         Job job;
         while (read(master_to_slave_pipe[0], &job, sizeof(job)) > 0) {
@@ -86,21 +97,21 @@ int main() {
         close(master_to_slave_pipe[0]);
         close(slave_to_master_pipe[1]);
     }
-    // Wait for everyone
-    wait_for_all_children();
+    // Done
+    return 0;
 }
 
 void reduce_step(const int numbers_size, long *numbers, const int fd_write, const int fd_read) {
     JobResult result;
     int read_results = 0;
-    int expected_reads = numbers_size / 2; // get_next_numbers_size(numbers_size);
+    int expected_reads = numbers_size / 2;
     // Send all to children
     for (int i = 1; i < numbers_size; i += 2) {
         Job job = {numbers[i - 1], numbers[i]};
         //printf("wrote %d\n", (i - 1) / 2);
         write(fd_write, &job, sizeof(job)); // this is non-blocking until internal buffer is not full!
-        if ((i - 1) / 2 % WORKER_COUNT == 0 && i != 1) { // slowly empty buffer
-            for (int j = 0; j < WORKER_COUNT && read_results < expected_reads; j++) {
+        if ((i - 1) / 2 % BUFFER_EMPTY_INTERVAL == BUFFER_EMPTY_INTERVAL - 1) { // slowly empty buffer
+            for (int j = 0; j < BUFFER_EMPTY_INTERVAL && read_results < expected_reads; j++) {
                 //printf("read %d\n", read_results);
                 read(fd_read, &result, sizeof(result));
                 numbers[read_results] = result.result;
