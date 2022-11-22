@@ -1,0 +1,33 @@
+\smalltitle{سوال 1}
+\begin{enumerate}
+    \item یا در حالت
+    \lr{ready} است یا \lr{running}.
+    دلیل این موضوع این است که ممکن است به خاطر
+    \lr{context switch}
+    پردازه از
+    \lr{CPU}
+    در آمده باشد که پردازه‌ی دیگری در
+    \lr{CPU}
+    قرار گیرد.
+    \item \lr{ready}
+    \item بستگی به پیاده سازی دارد.
+    قاعدتا در پیاده سازی درست و با کمک
+    \lr{condvar}
+    باید در حالت
+    \lr{waiting}
+    باشد. اما ممکن است که به کمک
+    \lr{spin lock}
+    پیاده سازی شده باشد. در این صورت بین حالت
+    \lr{ready} و \lr{running}
+    جا به جا می‌شود.
+    \item پردازه را از حالت
+    \lr{running} به \lr{waiting}
+    می‌برد که منتظر
+    \lr{IO}
+    باشد.
+\end{enumerate}
+
+
+
+
+
