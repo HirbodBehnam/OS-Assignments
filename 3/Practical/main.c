@@ -72,7 +72,7 @@ int main() {
         long *numbers = source_read_all_numbers(&numbers_size);
         // Reduce until numbers_size is zero
         while (numbers_size != 1) {
-            printf("executing with %d numbers\n", numbers_size);
+            printf("executing reduce with %d numbers\n", numbers_size);
             reduce_step(numbers_size, numbers, master_to_slave_pipe[1], slave_to_master_pipe[0]);
             // if it's even, do nothing, otherwise + 1
             numbers_size = numbers_size / 2 + (numbers_size % 2);
@@ -98,18 +98,18 @@ int main() {
 }
 
 void reduce_step(const int numbers_size, long *numbers, const int fd_write, const int fd_read) {
-    JobResult result;
-    int read_results = 0, sent_count = 0;
-    int expected_reads = numbers_size / 2;
+    int sent_count = 0;
+    const int expected_reads = numbers_size / 2;
     // At first send a job for each slave
     for (; sent_count < WORKER_COUNT && sent_count < numbers_size; sent_count++) {
         Job job = {numbers[2 * sent_count], numbers[2 * sent_count + 1]};
         write(fd_write, &job, sizeof(job)); // this is non-blocking until internal buffer is not full!
         // We send all first jobs and get them later
     }
-    // Now receive one job and then replace another in buffer
-    for (; read_results < expected_reads; read_results++) {
-        // Wait to read a job
+    // Now receive one job and then replace it with another
+    for (int read_results = 0; read_results < expected_reads; read_results++) {
+        // Wait to read a job result
+        JobResult result;
         read(fd_read, &result, sizeof(result));
         numbers[read_results] = result.result;
         // If needed, replace the job
