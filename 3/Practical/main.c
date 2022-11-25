@@ -11,10 +11,6 @@
  * Number of child processes to spawn
  */
 #define WORKER_COUNT 8
-/**
- * How frequently we should empty the read buffer of slaves?
- */
-#define BUFFER_EMPTY_INTERVAL 1000
 
 /**
  * Defines a job to be send to a slave
@@ -103,27 +99,25 @@ int main() {
 
 void reduce_step(const int numbers_size, long *numbers, const int fd_write, const int fd_read) {
     JobResult result;
-    int read_results = 0;
+    int read_results = 0, sent_count = 0;
     int expected_reads = numbers_size / 2;
-    // Send all to children
-    for (int i = 1; i < numbers_size; i += 2) {
-        Job job = {numbers[i - 1], numbers[i]};
-        //printf("wrote %d\n", (i - 1) / 2);
+    // At first send a job for each slave
+    for (; sent_count < WORKER_COUNT && sent_count < numbers_size; sent_count++) {
+        Job job = {numbers[2 * sent_count], numbers[2 * sent_count + 1]};
         write(fd_write, &job, sizeof(job)); // this is non-blocking until internal buffer is not full!
-        if ((i - 1) / 2 % BUFFER_EMPTY_INTERVAL == BUFFER_EMPTY_INTERVAL - 1) { // slowly empty buffer
-            for (int j = 0; j < BUFFER_EMPTY_INTERVAL && read_results < expected_reads; j++) {
-                //printf("read %d\n", read_results);
-                read(fd_read, &result, sizeof(result));
-                numbers[read_results] = result.result;
-                read_results++;
-            }
-        }
+        // We send all first jobs and get them later
     }
-    // Get all results
-    printf("expecting %d jobs; already read %d results\n", expected_reads, read_results);
+    // Now receive one job and then replace another in buffer
     for (; read_results < expected_reads; read_results++) {
+        // Wait to read a job
         read(fd_read, &result, sizeof(result));
         numbers[read_results] = result.result;
+        // If needed, replace the job
+        if (sent_count < expected_reads) {
+            Job job = {numbers[2 * sent_count], numbers[2 * sent_count + 1]};
+            write(fd_write, &job, sizeof(job));
+            sent_count++;
+        }
     }
     // Update the last element if needed
     if (numbers_size % 2 == 1) {
