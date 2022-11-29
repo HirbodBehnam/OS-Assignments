@@ -1,9 +1,12 @@
+#include <errno.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include "external.h"
 #include "file_util.h"
 
@@ -11,6 +14,11 @@
  * Number of child processes to spawn
  */
 #define WORKER_COUNT 8
+
+/**
+ * Path of pipe which slaves send their results to master
+ */
+const char *slave_to_master_pipe_name = "/tmp/os-assignment.pipe";
 
 /**
  * Defines a job to be send to a slave
@@ -40,13 +48,14 @@ void reduce_step(int numbers_size, long *numbers, int fd_write, int fd_read);
 
 int main() {
     bool master = true; // detects if process is master or slave
-    int master_to_slave_pipe[2], slave_to_master_pipe[2];
+    int master_to_slave_pipe[2];
     if (pipe(master_to_slave_pipe) == -1) {
         perror("cannot create pipe");
         exit(1);
     }
-    if (pipe(slave_to_master_pipe) == -1) {
-        perror("cannot create pipe");
+    remove(slave_to_master_pipe_name); // remove pipe from previous runs
+    if (mkfifo(slave_to_master_pipe_name, 0666) < 0) {
+        perror("cannot create fifo");
         exit(1);
     }
     // Fork and send data
@@ -58,7 +67,6 @@ int main() {
         }
         if (pid == 0) {       // don't fork anymore on childs
             close(master_to_slave_pipe[1]); // close unused write end
-            close(slave_to_master_pipe[0]); // close unused read end
             master = false;
             break;
         }
@@ -66,32 +74,37 @@ int main() {
     // On master send the works
     if (master) {
         close(master_to_slave_pipe[0]); // close unused read end
-        close(slave_to_master_pipe[1]); // close unused write end
+        int slave_to_master_pipe = open(slave_to_master_pipe_name, O_RDONLY);
+        if (slave_to_master_pipe < 0) {
+            perror("cannot open pipe in master");
+            exit(1);
+        }
         // Read numbers to start the reduction
         int numbers_size;
         long *numbers = source_read_all_numbers(&numbers_size);
         // Reduce until numbers_size is zero
         while (numbers_size != 1) {
             printf("executing reduce with %d numbers\n", numbers_size);
-            reduce_step(numbers_size, numbers, master_to_slave_pipe[1], slave_to_master_pipe[0]);
+            reduce_step(numbers_size, numbers, master_to_slave_pipe[1], slave_to_master_pipe);
             // if it's even, do nothing, otherwise + 1
             numbers_size = numbers_size / 2 + (numbers_size % 2);
         }
         close(master_to_slave_pipe[1]); // close for childs
-        close(slave_to_master_pipe[0]);
+        close(slave_to_master_pipe);
         printf("Result is %ld\n", numbers[0]);
         free(numbers);
         // Wait for children
         wait_for_all_children();
     } else { // On slaves wait for work
+        int slave_to_master_pipe = open(slave_to_master_pipe_name, O_WRONLY);
         Job job;
         while (read(master_to_slave_pipe[0], &job, sizeof(job)) > 0) {
             JobResult result = {fun(job.a, job.b)};
-            write(slave_to_master_pipe[1], &result, sizeof(result));
+            write(slave_to_master_pipe, &result, sizeof(result));
         }
         // Cleanup
         close(master_to_slave_pipe[0]);
-        close(slave_to_master_pipe[1]);
+        close(slave_to_master_pipe);
     }
     // Done
     return 0;
