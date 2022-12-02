@@ -1,0 +1,16 @@
+\smalltitle{سوال 5}
+\\~
+از حالت
+\lr{terminated}
+که نمی‌توانیم بیرون بیاییم.
+\begin{itemize}
+    \item \lr{waiting} به \lr{terminated}: این حالت زمانی پیش می‌آید که ترد در حال \lr{sleep} باشد و تابعی مثل \lr{pthread\_cancel} را بر روی آن اجرا کنیم.
+    \item \lr{ready} به \lr{terminated}: این حالت زمانی پیش می‌آید که ترد منتظر \lr{CPU times} باشد و تابعی مثل \lr{pthread\_cancel} را بر روی آن اجرا کنیم.
+    \item \lr{running} به \lr{terminated}: زمانی که ترد به صورت عادی کارش تمام می‌شود.
+    \item \lr{waiting} به \lr{ready}: زمانی که مثل یک پردازه‌ی عادی کار تابعی مثل \lr{read} تمام می‌شود.
+    \item \lr{running} به \lr{ready}: زمانی که سیستم عامل ترد را از \lr{CPU} خارج می‌کند. (عملا \lr{time slice} آن تمام شده است.)
+    \item \lr{ready} به \lr{waiting}: امکان پذیر نیست.
+    \item \lr{running} به \lr{waiting}: زمانی که تابعی مثل \lr{read} فراخوانی می‌شود که ترد منتظر \lr{IO} می‌ماند.
+    \item \lr{ready} به \lr{running}: زمانی که سیستم‌عامل می‌خواهد که به ترد یک \lr{time slice} در \lr{CPU} بدهد.
+    \item \lr{waiting} به \lr{running}: زمانی که بلافاصله بعد از رخ دادن یک \lr{event} مثل تمام شدن \lr{sleep} یا تمام شدن دستور \lr{IO} ترد اجرا شود.
+\end{itemize}
