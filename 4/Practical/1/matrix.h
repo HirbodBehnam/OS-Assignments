@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #define INFINITY (-1)
 
@@ -49,7 +50,7 @@ void read_matrix(const char *path, GraphMatrix *matrix) {
         fscanf(source, "%s", buffer);
         int x = i / matrix->n;
         int y = i % matrix->n;
-        if ((unsigned char) buffer[0] == 236) {
+        if ((unsigned char) buffer[0] == 236 || strcmp(buffer, "∞") == 0) {
             matrix->matrix[x][y] = INFINITY;
         } else {
             matrix->matrix[x][y] = atoi(buffer);
@@ -65,8 +66,12 @@ void read_matrix(const char *path, GraphMatrix *matrix) {
  */
 void print_matrix(GraphMatrix *matrix) {
     for (int i = 0; i < matrix->n; i++) {
-        for (int j = 0; j < matrix->n; j++)
-            printf("%d ", matrix->matrix[i][j]);
+        for (int j = 0; j < matrix->n; j++) {
+            if (matrix->matrix[i][j] == INFINITY)
+                printf("∞ ");
+            else
+                printf("%d ", matrix->matrix[i][j]);
+        }
         printf("\n");
     }
 }
