@@ -3,7 +3,7 @@ import requests
 import time
 
 def request_site():
-    requests.get('http://www.example.org')
+    return requests.get('http://www.example.org').text
 
 start_time = time.time()
 threads = []
