@@ -13,7 +13,7 @@ for i in range(20):
     threads.append(thread)
 
 for t in threads:
-    thread.join()
+    t.join()
 
 end_time = time.time()
 print(end_time - start_time)

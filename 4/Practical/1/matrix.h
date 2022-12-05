@@ -50,7 +50,7 @@ void read_matrix(const char *path, GraphMatrix *matrix) {
         fscanf(source, "%s", buffer);
         int x = i / matrix->n;
         int y = i % matrix->n;
-        if ((unsigned char) buffer[0] == 236 || strcmp(buffer, "∞") == 0) {
+        if ((unsigned char) buffer[0] == 236 || strcmp(buffer, "∞") == 0 || strcmp(buffer, "i") == 0) {
             matrix->matrix[x][y] = INFINITY;
         } else {
             matrix->matrix[x][y] = atoi(buffer);
