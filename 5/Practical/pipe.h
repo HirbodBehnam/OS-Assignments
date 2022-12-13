@@ -3,27 +3,26 @@
 
 #endif //PRACTICAL_PIPE_H
 
-#include <sys/unistd.h>
+#include <unistd.h>
 #include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
-
-#ifndef TEST_PIPE_H
-#define TEST_PIPE_H
-
-#endif //TEST_PIPE_H
+#include <fcntl.h>
 
 typedef struct {
     int reader;
     int writer;
 } simplified_pipe;
 
-simplified_pipe create_simple_pipe() {
+simplified_pipe create_simple_pipe(bool non_blocking_read) {
     int pipe_fd[2];
     if (pipe(pipe_fd) < 0) {
         perror("cannot create pipe");
         exit(1);
     }
+    // https://stackoverflow.com/a/36674490/4213397
+    if (non_blocking_read)
+        fcntl(pipe_fd[0], F_SETFL, fcntl(pipe_fd[0], F_GETFL) | O_NONBLOCK);
     simplified_pipe result = {
             .reader = pipe_fd[0],
             .writer = pipe_fd[1],
