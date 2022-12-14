@@ -51,7 +51,7 @@ ackerman_job extract_job(ackerman_job *jobs, int length) {
             min_priority = jobs[i].m + jobs[i].n;
         }
     }
-    // Shift everything forward
+    // Shift everything back
     ackerman_job result = jobs[min_index];
     for (int i = min_index + 1; i < length; i++)
         jobs[i - 1] = jobs[i];
@@ -64,8 +64,7 @@ void *dispatcher_thread(void *args) {
     while (1) {
         // Check if we have any new jobs
         ackerman_job new_job;
-        ssize_t read_result;
-        if ((read_result = read(master_to_dispatcher.reader, &new_job, sizeof(new_job))) > 0) {
+        if (read(master_to_dispatcher.reader, &new_job, sizeof(new_job)) > 0) {
             queued_jobs[queued_jobs_length] = new_job;
             queued_jobs_length++;
         } else {
