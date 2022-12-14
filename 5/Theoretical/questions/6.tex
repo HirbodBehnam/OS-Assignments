@@ -33,8 +33,33 @@ $4 + 7 = 11$
     \text{WaitingTime} &= \{0, 1\}
 \end{align*}
 در نهایت اعداد را میانگین می‌گیریم.
-% TODO: explain what the fuck just happened
+برای درک بهتر می‌توانید شکل جدول زیر را نیز مشاهده کنید:
+(زمانی که خانه‌ها قرمز می‌شوند یعنی کار تسک تمام شده است.)
+\begin{latin}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textcolor{red}{$T_1$ (0 $\rightarrow$ 4)} & \textcolor{red}{$T_2$ (4 $\rightarrow$ 11)} & $T_3$ (11 $\rightarrow$ 19) & $T_4$ (19 $\rightarrow$ 27) & $T_5$ (27 $\rightarrow$ 35) & $T_6$ (35 $\rightarrow$ 43) \\
+    \hline
+\end{tabular}
+\linebreak
+\begin{tabular}{|c|c|c|c|}
+    \hline
+    \textcolor{red}{$T_3$ (43 $\rightarrow$ 47)} & \textcolor{red}{$T_4$ (47 $\rightarrow$ 59)} & $T_5$ (59 $\rightarrow$ 75) & $T_6$ (75 $\rightarrow$ 91) \\
+    \hline
+\end{tabular}
+\linebreak
+\begin{tabular}{|c|c|}
+    \hline
+    \textcolor{red}{$T_5$ (91 $\rightarrow$ 92)} & \textcolor{red}{$T_6$ (92 $\rightarrow$ 98)} \\
+    \hline
+\end{tabular}
+\end{center}
+\end{latin}
+حال با توجه به جدول بالا داده‌های خواسته‌شده‌ی سوال را بدست می‌آوریم.
 \begin{gather*}
-    \text{RunningTime} = \frac{4 + 11 + (43 + 4) + (43 + 16) + (91 + 1) + (91 + 7)}{6} \approx 51.8\\
-    \frac{0 + 4 + (11 + (43 - 19 + 0)) + (19 + (43 - 27 + 4)) + (27 + (43 - 35 + 16) + 16) + (27 + (43 - 35 + 16) + 17)}{6} = 35.5 
+    \text{RunningTime} = \frac{4 + 11 + 47 + 59 + 92 + 98}{6} \approx 51.8\\
+    \text{WaitingTime} = \\
+    \frac{0 + 4 + (11 + (43 - 19)) + (19 + (47 - 27)) + (27 + (59 - 35) + (91 - 75)) + (35 + (75 - 43) + (92 - 91))}{6}
+    \\= 35.5 
 \end{gather*}

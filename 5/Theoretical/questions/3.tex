@@ -1,9 +1,29 @@
 \smalltitle{سوال 3}
+\\\noindent
+فرض می‌کنیم که الگوریتم
+\lr{HRRN}
+قرار است که
+\lr{non preemptive}
+باشد. با این فرض پردازه
+$A$
+زمانی که در صف قرار می‌گیرد دیگر تا ثانیه‌ی 3،
+\lr{CPU}
+را آزاد نمی‌کند.
+حال اولیت دو برنامه‌ی
+$B$ و $C$
+به صورت زیر می‌شود در ثانیه‌ی سوم که قرار است بین یکی از این دو انتخاب کنیم:
 \begin{gather*}
-    3 + t_{B} + t_{C}
+    P_B = \frac{(3 - 1) + t_b}{t_b} = \frac{2 + t_b}{t_b}\\
+    P_C = \frac{(3 - 2) + t_c}{t_c} = \frac{1 + t_c}{t_c}
 \end{gather*}
-
-
+برای اینکه این الگوریتم مثل
+\lr{FCFS}
+عمل کند باید
+$P_B > P_C$
+باشد. پس داریم:
+\begin{gather*}
+    \frac{2 + t_b}{t_b} > \frac{1 + t_c}{t_c} \implies 2t_c + t_b t_c > t_b + t_c t_b \implies 2t_c > t_b
+\end{gather*}
 
 
 
