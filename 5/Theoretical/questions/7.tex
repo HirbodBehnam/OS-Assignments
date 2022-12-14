@@ -9,19 +9,24 @@
     % Data
     0 & $A$ & $A$ & $A$ \\
     1 & $A$ & $B$ & $A$ \\
-    2 & $A$ & $A$ & $A$ \\
-    3 & $B$ & $A$ & $C$ \\
+    2 & $B$ & $A$ & $A$ \\
+    3 & $A$ & $A$ & $C$ \\
     4 & $C$ & $C$ & $C$ \\
     5 & $C$ & $C$ & $C$ \\
     6 & $C$ & $D$ & $D$ \\
-    7 & $C$ & $D$ & $D$ \\
+    7 & $D$ & $D$ & $D$ \\
     8 & $C$ & $E$ & $C$ \\
     9 & $D$ & $E$ & $C$ \\
-    10 & $D$ & $C$ & $B$ \\
-    11 & $E$ & $C$ & $E$ \\
+    10 & $E$ & $C$ & $B$ \\
+    11 & $C$ & $C$ & $E$ \\
     12 & $E$ & $C$ & $E$ \\
     % Done
     \hline
 \end{tabular}
 \end{center}
 \end{latin}
+\begin{align*}
+    \text{\lr{RR Waiting Time}} &= \frac{(1) + (1) + (1 + 1 + 2) + (1 + 1) + (2 + 1)}{5} = 2.2\\
+    \text{\lr{SRTF Waiting Time}} &= \frac{(1) + (0) + (1 + 4) + (0) + (0)}{5} = 1.2\\
+    \text{\lr{Priority Waiting Time}} &= \frac{(0) + (9) + (2) + (0) + (3)}{5} = 2.8
+\end{align*}
