@@ -16,6 +16,7 @@ void car_thread(Car *car) {
     while (car->next()) {
         car->advance(roads);
     }
+    delete car;
 }
 
 int main(int argc, char **argv) {

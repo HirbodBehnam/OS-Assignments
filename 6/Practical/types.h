@@ -58,7 +58,7 @@ public:
     }
 
     bool next() {
-        if (path_index == path.size())
+        if (path_index == path.size() - 1)
             return false;
         path_index++;
         return true;
