@@ -12,9 +12,24 @@ roads_t roads;
 // Total emission of cars
 std::atomic_uint64_t total_emission;
 
-void car_thread(Car *car) {
+void car_thread(uint64_t path_id, Car *car) {
+    // Create the log filename
+    std::string log_filename;
+    log_filename += std::to_string(path_id);
+    log_filename += '-';
+    log_filename += std::to_string(car->get_id());
+    log_filename += ".txt";
+    // Open the logger
+    std::ofstream log_file(log_filename, std::ios::out | std::ios::trunc);
+    // Move the car
     while (car->next()) {
-        car->advance(roads);
+        auto result = car->advance(roads, &total_emission);
+        log_file << result.start_node << ", "
+                 << result.road_data.lock_got_time << ", "
+                 << result.end_node << ", "
+                 << result.road_data.end_time << ", "
+                 << result.road_data.emission << ", "
+                 << result.road_data.next_emission << "\n";
     }
     delete car;
 }
@@ -38,7 +53,9 @@ int main(int argc, char **argv) {
     }
     // Read cars and create treads
     std::list<std::thread> threads;
+    uint64_t path_id = 0;
     while (true) {
+        path_id++;
         // Read input
         std::string line;
         if (!std::getline(input_file, line))
@@ -52,7 +69,7 @@ int main(int argc, char **argv) {
         int car_count = std::stoi(line);
         for (int i = 0; i < car_count; i++) {
             Car *car = new Car(path_c);
-            threads.emplace_back(car_thread, car);
+            threads.emplace_back(car_thread, path_id, car);
         }
     }
     input_file.close();
