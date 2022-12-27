@@ -4,17 +4,18 @@
 #include <iostream>
 #include <thread>
 #include <string>
-#include <unordered_map>
 #include "types.h"
 #include "util.h"
 
 // List of all roads
-std::unordered_map<char, std::unordered_map<char, Road *>> roads;
+roads_t roads;
 // Total emission of cars
 std::atomic_uint64_t total_emission;
 
 void car_thread(Car *car) {
-    // TODO
+    while (car->next()) {
+        car->advance(roads);
+    }
 }
 
 int main(int argc, char **argv) {
@@ -27,7 +28,7 @@ int main(int argc, char **argv) {
     while (true) { // read roads
         std::string line;
         std::getline(input_file, line);
-        if (line == "#") // end of roads
+        if (line.at(0) == '#') // end of roads
             break;
         auto parts = split_string(line, "-");
         char s1 = parts.at(0).at(0), s2 = parts.at(1).at(0);
@@ -42,11 +43,16 @@ int main(int argc, char **argv) {
         if (!std::getline(input_file, line))
             break;
         auto path = split_string(line, "-");
-        std::vector<char> path_c(path.size());
+        std::vector<char> path_c;
         for (auto &p: path)
             path_c.push_back(p.at(0));
-        Car *car = new Car(path_c);
-        threads.emplace_back(car_thread, car);
+        // Create cars
+        std::getline(input_file, line);
+        int car_count = std::stoi(line);
+        for (int i = 0; i < car_count; i++) {
+            Car *car = new Car(path_c);
+            threads.emplace_back(car_thread, car);
+        }
     }
     input_file.close();
     // Wait for threads

@@ -3,10 +3,11 @@
 
 #endif //PRACTICAL_TYPES_H
 
-#include <mutex>
 #include <condition_variable>
-#include <vector>
+#include <mutex>
 #include <random>
+#include <vector>
+#include <unordered_map>
 
 class Road {
 private:
@@ -33,6 +34,8 @@ public:
     }
 };
 
+typedef std::unordered_map<char, std::unordered_map<char, Road *>> roads_t;
+
 static uint64_t current_car_id = 0;
 
 class Car {
@@ -50,7 +53,7 @@ private:
     }
 
 public:
-    explicit Car(std::vector<char> &path) : id(current_car_id++), path(path), path_index(0) {
+    explicit Car(std::vector<char> &path) : id(++current_car_id), path(path), path_index(0) {
         p = generate_p();
     }
 
@@ -65,7 +68,8 @@ public:
      * Advances car to next road
      * @return True if we have reached the final destination otherwise false
      */
-    uint64_t advance(Road &road) const {
-        road.move_in_road(this->p);
+    uint64_t advance(roads_t &r) const {
+        auto road = r.at(path[path_index - 1]).at(path[path_index]);
+        return road->move_in_road(this->p);
     }
 };

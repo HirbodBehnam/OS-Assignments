@@ -33,4 +33,5 @@ std::vector<std::string> split_string(std::string s, const std::string &delimite
         s.erase(0, pos + delimiter.length());
     }
     result.push_back(trim(s));
+    return result;
 }
