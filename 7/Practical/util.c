@@ -6,7 +6,7 @@
 #include <stdatomic.h>
 
 static const char *prefix_cut(const char *str, const char *pre) {
-    int pre_size = strlen(pre);
+    size_t pre_size = strlen(pre);
     if (strncmp(pre, str, pre_size) == 0) { // has prefix
         return str + pre_size;
     } else { // does not have prefix
@@ -40,7 +40,7 @@ struct ParsedArguments parse_arguments(int argc, char **argv) {
 }
 
 char *get_random_string() {
-    static int counter;
+    static atomic_int counter;
     char *buffer = malloc(10 * sizeof(char));
     int next = counter++; // this is atomic to be thread safe
     sprintf(buffer, "str%d", next);

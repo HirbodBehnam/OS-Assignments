@@ -15,5 +15,5 @@ struct ParsedArguments parse_arguments(int argc, char **argv);
  * with a atomic counter to simulate distinct strings.
  * @return A random string
  */
-char *get_random_string()
+char *get_random_string();
 
