@@ -10,8 +10,11 @@ struct ThreadArguments {
 };
 
 LinkedList_t *list;
+pthread_rwlock_t list_lock = PTHREAD_RWLOCK_INITIALIZER;
 
 void make_list();
+
+void print_list();
 
 void *worker_thread(void *args) {
     // Get arguments
@@ -20,7 +23,44 @@ void *worker_thread(void *args) {
     // Do stuff
     for (int i = 0; i < thread_arguments.iteration_count; i++) {
         char *payload = get_random_string();
-        // TODO
+        // Add to list
+        {
+            pthread_rwlock_wrlock(&list_lock);
+            Element_t *elem = malloc(sizeof(Element_t));
+            elem->value = clone_string(payload);
+            insert(list, elem);
+            printf("Thread %d: inserted %s\n", thread_arguments.thread_id, payload);
+            pthread_rwlock_unlock(&list_lock);
+        }
+        // Get list size
+        {
+            pthread_rwlock_rdlock(&list_lock);
+            printf("Thread %d: length is %d\n", thread_arguments.thread_id, get_length(list));
+            pthread_rwlock_unlock(&list_lock);
+        }
+        // Find the element
+        Element_t *found_element;
+        {
+            pthread_rwlock_wrlock(&list_lock);
+            found_element = lookup(list, payload);
+            if (found_element == NULL)
+                printf("Thread %d: cannot find the payload\n", thread_arguments.thread_id);
+            else
+                printf("Thread %d: found %s\n", thread_arguments.thread_id, payload);
+            pthread_rwlock_unlock(&list_lock);
+        }
+        if (found_element == NULL)
+            return NULL; // welp
+        // Delete from list
+        {
+            pthread_rwlock_wrlock(&list_lock);
+            if (delete(found_element))
+                printf("Thread %d: fuck up in delete\n", thread_arguments.thread_id);
+            else
+                printf("Thread %d: deleted %s\n", thread_arguments.thread_id, payload);
+            pthread_rwlock_unlock(&list_lock);
+        }
+        free(payload);
     }
     // Done
     return NULL;
@@ -42,6 +82,7 @@ int main(int argc, char **argv) {
     // Wait for them
     for (int i = 0; i < arguments.thread_count; i++)
         pthread_join(threads[i], NULL);
+    print_list();
     return 0;
 }
 
@@ -58,6 +99,10 @@ void make_list() {
         insert(list, elem);
     }
     // Print list
+    print_list();
+}
+
+void print_list() {
     Element_t *elem = list->next;
     printf("Current list: ");
     while (1) {

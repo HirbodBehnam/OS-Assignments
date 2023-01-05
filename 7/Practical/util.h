@@ -17,3 +17,10 @@ struct ParsedArguments parse_arguments(int argc, char **argv);
  */
 char *get_random_string();
 
+/**
+ * Clone a string into a heap allocated string stream
+ * @param str String to copy
+ * @return A copy of string
+ */
+char *clone_string(const char *str);
+

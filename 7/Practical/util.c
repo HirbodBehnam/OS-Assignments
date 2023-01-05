@@ -46,3 +46,9 @@ char *get_random_string() {
     sprintf(buffer, "str%d", next);
     return buffer;
 }
+
+char *clone_string(const char *str) {
+    char *clone = malloc((strlen(str) + 1) * sizeof(char));
+    strcpy(clone, str);
+    return clone;
+}
