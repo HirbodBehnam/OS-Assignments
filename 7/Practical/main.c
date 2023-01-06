@@ -10,7 +10,6 @@ struct ThreadArguments {
 };
 
 LinkedList_t *list;
-pthread_rwlock_t list_lock = PTHREAD_RWLOCK_INITIALIZER;
 
 void make_list();
 
@@ -25,40 +24,32 @@ void *worker_thread(void *args) {
         char *payload = get_random_string();
         // Add to list
         {
-            pthread_rwlock_wrlock(&list_lock);
             Element_t *elem = malloc(sizeof(Element_t));
             elem->value = clone_string(payload);
             insert(list, elem);
             printf("Thread %d: inserted %s\n", thread_arguments.thread_id, payload);
-            pthread_rwlock_unlock(&list_lock);
         }
         // Get list size
         {
-            pthread_rwlock_rdlock(&list_lock);
             printf("Thread %d: length is %d\n", thread_arguments.thread_id, get_length(list));
-            pthread_rwlock_unlock(&list_lock);
         }
         // Find the element
         Element_t *found_element;
         {
-            pthread_rwlock_wrlock(&list_lock);
             found_element = lookup(list, payload);
             if (found_element == NULL)
                 printf("Thread %d: cannot find the payload\n", thread_arguments.thread_id);
             else
                 printf("Thread %d: found %s\n", thread_arguments.thread_id, payload);
-            pthread_rwlock_unlock(&list_lock);
         }
         if (found_element == NULL)
             return NULL; // welp
         // Delete from list
         {
-            pthread_rwlock_wrlock(&list_lock);
             if (delete(found_element))
                 printf("Thread %d: fuck up in delete\n", thread_arguments.thread_id);
             else
                 printf("Thread %d: deleted %s\n", thread_arguments.thread_id, payload);
-            pthread_rwlock_unlock(&list_lock);
         }
         free(payload);
     }
