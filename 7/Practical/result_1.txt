@@ -1,0 +1,50 @@
+Current list: str0 -> str1 -> str2
+Thread 0: inserted str3
+Thread 0: length is 4
+Thread 0: found str3
+Thread 0: deleted str3
+Thread 0: inserted str4
+Thread 0: length is 4
+Thread 0: found str4
+Thread 0: deleted str4
+Thread 0: inserted str5
+Thread 0: length is 4
+Thread 0: found str5
+Thread 0: deleted str5
+Thread 0: inserted str6
+Thread 0: length is 4
+Thread 0: found str6
+Thread 0: deleted str6
+Thread 0: inserted str7
+Thread 0: length is 4
+Thread 0: found str7
+Thread 0: deleted str7
+Thread 0: inserted str8
+Thread 0: length is 4
+Thread 0: found str8
+Thread 0: deleted str8
+Thread 1: inserted str9
+Thread 1: length is 4
+Thread 1: found str9
+Thread 1: deleted str9
+Thread 1: inserted str10
+Thread 1: length is 4
+Thread 1: found str10
+Thread 1: deleted str10
+Thread 1: inserted str11
+Thread 1: length is 4
+Thread 1: found str11
+Thread 1: deleted str11
+Thread 1: inserted str12
+Thread 1: length is 4
+Thread 1: found str12
+Thread 1: deleted str12
+Thread 1: inserted str13
+Thread 1: length is 4
+Thread 1: found str13
+Thread 1: deleted str13
+Thread 1: inserted str14
+Thread 1: length is 4
+Thread 1: found str14
+Thread 1: deleted str14
+Current list: str0 -> str1 -> str2

@@ -1,0 +1,130 @@
+Current list: str0 -> str1 -> str2
+Thread 0: inserted str3
+Thread 0: length is 4
+Thread 0: found str3
+Thread 0: deleted str3
+Thread 0: inserted str4
+Thread 0: length is 4
+Thread 0: found str4
+Thread 0: deleted str4
+Thread 0: inserted str5
+Thread 0: length is 4
+Thread 0: found str5
+Thread 0: deleted str5
+Thread 0: inserted str6
+Thread 0: length is 4
+Thread 0: found str6
+Thread 0: deleted str6
+Thread 0: inserted str7
+Thread 0: length is 4
+Thread 0: found str7
+Thread 0: deleted str7
+Thread 0: inserted str8
+Thread 0: length is 4
+Thread 0: found str8
+Thread 0: deleted str8
+Thread 0: inserted str9
+Thread 0: length is 4
+Thread 0: found str9
+Thread 0: deleted str9
+Thread 0: inserted str10
+Thread 0: length is 4
+Thread 0: found str10
+Thread 0: deleted str10
+Thread 1: inserted str11
+Thread 1: length is 4
+Thread 1: found str11
+Thread 1: deleted str11
+Thread 1: inserted str12
+Thread 1: length is 4
+Thread 1: found str12
+Thread 1: deleted str12
+Thread 1: inserted str13
+Thread 1: length is 4
+Thread 1: found str13
+Thread 1: deleted str13
+Thread 1: inserted str14
+Thread 1: length is 4
+Thread 1: found str14
+Thread 1: deleted str14
+Thread 1: inserted str15
+Thread 1: length is 4
+Thread 1: found str15
+Thread 1: deleted str15
+Thread 1: inserted str16
+Thread 1: length is 4
+Thread 1: found str16
+Thread 1: deleted str16
+Thread 1: inserted str17
+Thread 1: length is 4
+Thread 1: found str17
+Thread 1: deleted str17
+Thread 1: inserted str18
+Thread 1: length is 4
+Thread 1: found str18
+Thread 1: deleted str18
+Thread 2: inserted str19
+Thread 2: length is 4
+Thread 2: found str19
+Thread 2: deleted str19
+Thread 2: inserted str20
+Thread 2: length is 4
+Thread 2: found str20
+Thread 2: deleted str20
+Thread 2: inserted str21
+Thread 2: length is 4
+Thread 2: found str21
+Thread 2: deleted str21
+Thread 2: inserted str22
+Thread 2: length is 4
+Thread 2: found str22
+Thread 2: deleted str22
+Thread 2: inserted str23
+Thread 2: length is 4
+Thread 2: found str23
+Thread 2: deleted str23
+Thread 2: inserted str24
+Thread 2: length is 4
+Thread 2: found str24
+Thread 2: deleted str24
+Thread 2: inserted str25
+Thread 2: length is 4
+Thread 2: found str25
+Thread 2: deleted str25
+Thread 2: inserted str26
+Thread 2: length is 4
+Thread 2: found str26
+Thread 2: deleted str26
+Thread 3: inserted str27
+Thread 3: length is 4
+Thread 3: found str27
+Thread 3: deleted str27
+Thread 3: inserted str28
+Thread 3: length is 4
+Thread 3: found str28
+Thread 3: deleted str28
+Thread 3: inserted str29
+Thread 3: length is 4
+Thread 3: found str29
+Thread 3: deleted str29
+Thread 3: inserted str30
+Thread 3: length is 4
+Thread 3: found str30
+Thread 3: deleted str30
+Thread 3: inserted str31
+Thread 3: length is 4
+Thread 3: found str31
+Thread 3: deleted str31
+Thread 3: inserted str32
+Thread 3: length is 4
+Thread 3: found str32
+Thread 3: deleted str32
+Thread 3: inserted str33
+Thread 3: length is 4
+Thread 3: found str33
+Thread 3: deleted str33
+Thread 3: inserted str34
+Thread 3: length is 4
+Thread 3: found str34
+Thread 3: deleted str34
+Current list: str0 -> str1 -> str2
