@@ -4,22 +4,22 @@
         \item \begin{itemize}
             \item Virtual Address: $32$
             \item Physical Address: $\log_2{1GB} = 30$
-            \item Virtual Page count: $\log_2{\frac{4GB}{4KB}} = 20$
-            \item Physical Page count: $\log_2{\frac{1GB}{4KB}} = 18$
+            \item Virtual Page count: $\frac{4GB}{4KB} = 2^{20}$
+            \item Physical Page count: $\frac{1GB}{4KB} = 2^{18}$
             \item Offset: $\log_2{4KB} = 12$
         \end{itemize}
         \item \begin{itemize}
             \item Virtual Address: $32$
             \item Physical Address: $\log_2{2GB} = 31$
-            \item Virtual Page count: $\log_2{\frac{4GB}{16KB}} = 18$
-            \item Physical Page count: $\log_2{\frac{2GB}{16KB}} = 18$
+            \item Virtual Page count: $\frac{4GB}{16KB} = 2^{18}$
+            \item Physical Page count: $\frac{2GB}{16KB} = 2^{18}$
             \item Offset: $\log_2{16KB} = 14$
         \end{itemize}
         \item \begin{itemize}
             \item Virtual Address: $64$
             \item Physical Address: $\log_2{16GB} = 34$
-            \item Virtual Page count: $64-\log_2{16KB} = 50$
-            \item Physical Page count: $\log_2{\frac{16GB}{16KB}} = 20$
+            \item Virtual Page count: $\frac{2^64}{16K} = 2^{50}$
+            \item Physical Page count: $\frac{16GB}{16KB} = 2^{20}$
             \item Offset: $\log_2{16KB} = 14$
         \end{itemize}
     \end{enumerate}
